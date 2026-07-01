@@ -1,0 +1,12 @@
+{
+  "name": "cahuu-web-redesign",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal test scaffold for the Cahuu web redesign repository.",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
