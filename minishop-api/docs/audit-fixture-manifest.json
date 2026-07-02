@@ -1,0 +1,322 @@
+{
+  "fixtureVersion": "2.4.0",
+  "generatedFor": "API Documentation Audit Workflow Automation",
+  "implementedUniqueOperations": 35,
+  "openApiDocumentedOperations": 28,
+  "documentedCoveragePercent": 80,
+  "priorityTarget": {
+    "high": "approximately 20% of consolidated findings",
+    "medium": "approximately 30%",
+    "low": "approximately 50%"
+  },
+  "issueMatrix": [
+    {
+      "id": "AUD-001",
+      "type": "Schema Mismatch",
+      "endpoint": "POST /api/v1/auth/login",
+      "source": "src/dto/auth-user.dto.ts#LoginDto",
+      "documentation": "docs/openapi.yaml#/v1/auth/login",
+      "evidence": "Source requires email and password minLength 12; OpenAPI and old Postman send username with minLength 8.",
+      "severity": "Critical",
+      "criticality": "Critical",
+      "exposure": "Public",
+      "priority": "High",
+      "jiraScenario": "API-145 unresolved; update, do not create duplicate"
+    },
+    {
+      "id": "AUD-002",
+      "type": "Missing Validation Documentation",
+      "endpoint": "POST /api/v1/auth/register",
+      "source": "src/dto/auth-user.dto.ts#RegisterDto",
+      "documentation": "docs/openapi.yaml#RegisterRequest",
+      "evidence": "Source strong password minimum is 12 with upper, number, and symbol; contract states minimum 8 and omits phone validation.",
+      "severity": "High",
+      "criticality": "High",
+      "exposure": "Public",
+      "priority": "High",
+      "jiraScenario": "API-102 unresolved"
+    },
+    {
+      "id": "AUD-003",
+      "type": "Documentation Gap",
+      "endpoint": "POST /api/v1/auth/refresh",
+      "source": "src/controllers/auth.controller.ts#refresh",
+      "documentation": "docs/openapi.yaml",
+      "evidence": "Implemented protected-by-rate-limit public refresh operation has no OpenAPI path.",
+      "severity": "High",
+      "criticality": "Critical",
+      "exposure": "Public",
+      "priority": "High",
+      "jiraScenario": "new ticket required"
+    },
+    {
+      "id": "AUD-004",
+      "type": "Missing Response Fields",
+      "endpoint": "GET /api/v2/products/{productId}",
+      "source": "src/dto/catalog.dto.ts#ProductResponseDto",
+      "documentation": "docs/openapi.yaml#Product",
+      "evidence": "availableQuantity and averageRating exist in source response but not contract.",
+      "severity": "Medium",
+      "criticality": "High",
+      "exposure": "Public",
+      "priority": "Medium"
+    },
+    {
+      "id": "AUD-005",
+      "type": "Missing Filtering",
+      "endpoint": "GET /api/v2/products",
+      "source": "src/controllers/products.controller.ts#list",
+      "documentation": "docs/openapi.yaml#/v2/products",
+      "evidence": "search and sort source parameters are missing; legacy collection still calls /v1/products/search.",
+      "severity": "Low",
+      "criticality": "High",
+      "exposure": "Public",
+      "priority": "Low"
+    },
+    {
+      "id": "AUD-006",
+      "type": "Schema Mismatch",
+      "endpoint": "POST /api/v1/orders",
+      "source": "src/dto/commerce.dto.ts#CreateOrderDto",
+      "documentation": "docs/openapi.yaml#OrderWrite",
+      "evidence": "Source needs nested shippingAddress while contract references addressId.",
+      "severity": "High",
+      "criticality": "Critical",
+      "exposure": "Authenticated",
+      "priority": "High",
+      "jiraScenario": "API-317 unresolved; update"
+    },
+    {
+      "id": "AUD-007",
+      "type": "Authentication Mismatch",
+      "endpoint": "POST /api/v1/payments/{paymentId}/capture",
+      "source": "src/controllers/payments.controller.ts#capture",
+      "documentation": "docs/openapi.yaml#/v1/payments/{paymentId}/capture",
+      "evidence": "Source requires JWT, manager/admin role, and payments:capture; OpenAPI explicitly sets security to empty.",
+      "severity": "Critical",
+      "criticality": "Critical",
+      "exposure": "Authenticated",
+      "priority": "High",
+      "jiraScenario": "API-145 same auth root cause; link rather than duplicate"
+    },
+    {
+      "id": "AUD-008",
+      "type": "Documentation Gap",
+      "endpoint": "POST /api/v1/payments/{paymentId}/refunds",
+      "source": "src/controllers/payments.controller.ts#refund",
+      "documentation": "docs/openapi.yaml",
+      "evidence": "Admin payments:refund operation absent from all published docs.",
+      "severity": "Critical",
+      "criticality": "Critical",
+      "exposure": "Authenticated",
+      "priority": "High",
+      "jiraScenario": "new ticket required"
+    },
+    {
+      "id": "AUD-009",
+      "type": "Duplicate Route",
+      "endpoint": "POST /api/v1/cart/items",
+      "source": "src/controllers/cart.controller.ts#add and src/controllers/legacy.controller.ts#duplicateCartAdd",
+      "documentation": "docs/openapi.yaml#/v1/cart/items",
+      "evidence": "Two handlers register the same method and effective route.",
+      "severity": "High",
+      "criticality": "High",
+      "exposure": "Authenticated",
+      "priority": "High",
+      "jiraScenario": "API-102 exists; duplicate must be detected"
+    },
+    {
+      "id": "AUD-010",
+      "type": "Deprecated Endpoint",
+      "endpoint": "GET /api/v1/product/{id}",
+      "source": "src/controllers/legacy.controller.ts#product",
+      "documentation": "docs/openapi.yaml#/v1/product/{id}",
+      "evidence": "Documented deprecated route remains callable past migration window; v2 replacement exists.",
+      "severity": "High",
+      "criticality": "High",
+      "exposure": "Public",
+      "priority": "High"
+    },
+    {
+      "id": "AUD-011",
+      "type": "Missing Role Documentation",
+      "endpoint": "PATCH /api/v1/orders/{orderId}/status",
+      "source": "src/controllers/orders.controller.ts#status",
+      "documentation": "docs/openapi.yaml#/v1/orders/{orderId}/status",
+      "evidence": "Manager/admin and orders:status:write missing; fulfilling source enum value missing.",
+      "severity": "High",
+      "criticality": "Critical",
+      "exposure": "Authenticated",
+      "priority": "High"
+    },
+    {
+      "id": "AUD-012",
+      "type": "Missing Pagination",
+      "endpoint": "GET /api/v1/orders",
+      "source": "src/controllers/orders.controller.ts#list",
+      "documentation": "docs/openapi.yaml#/v1/orders",
+      "evidence": "status, page, limit, and sort are accepted in source but omitted from the contract.",
+      "severity": "Medium",
+      "criticality": "High",
+      "exposure": "Authenticated",
+      "priority": "Medium"
+    },
+    {
+      "id": "AUD-013",
+      "type": "Missing Validation Documentation",
+      "endpoint": "POST /api/v1/inventory/{productId}/adjustments",
+      "source": "src/dto/catalog.dto.ts#AdjustInventoryDto",
+      "documentation": "docs/openapi.yaml#/v1/inventory/{productId}/adjustments",
+      "evidence": "Source constrains delta to -10000..10000 and requires reasonDetail with maximum 250; contract omits all but delta type.",
+      "severity": "Medium",
+      "criticality": "High",
+      "exposure": "Authenticated",
+      "priority": "Medium"
+    },
+    {
+      "id": "AUD-014",
+      "type": "Schema Mismatch",
+      "endpoint": "POST /api/v1/cart/checkout",
+      "source": "src/dto/commerce.dto.ts#CheckoutDto",
+      "documentation": "docs/openapi.yaml#/v1/cart/checkout",
+      "evidence": "Source uses shippingAddress, paymentProvider enum, and optional promotionCode; docs use stale address and paymentMethod strings.",
+      "severity": "Critical",
+      "criticality": "Critical",
+      "exposure": "Authenticated",
+      "priority": "High"
+    },
+    {
+      "id": "AUD-015",
+      "type": "Documentation Gap",
+      "endpoint": "GET /api/v2/categories/{categoryId}/products",
+      "source": "src/controllers/categories.controller.ts#products",
+      "documentation": "docs/openapi.yaml",
+      "evidence": "Nested browse operation is implemented and included in README but absent from OpenAPI and old Postman.",
+      "severity": "Low",
+      "criticality": "Medium",
+      "exposure": "Public",
+      "priority": "Low"
+    },
+    {
+      "id": "AUD-016",
+      "type": "Missing Pagination",
+      "endpoint": "GET /api/v1/products/{productId}/reviews",
+      "source": "src/controllers/reviews.controller.ts#list",
+      "documentation": "docs/openapi.yaml#/v1/products/{productId}/reviews",
+      "evidence": "page, limit, and rating query inputs absent from OpenAPI.",
+      "severity": "Low",
+      "criticality": "Medium",
+      "exposure": "Public",
+      "priority": "Low"
+    },
+    {
+      "id": "AUD-017",
+      "type": "Missing Middleware Documentation",
+      "endpoint": "POST /api/v1/cart/checkout",
+      "source": "src/controllers/cart.controller.ts#checkout",
+      "documentation": "docs/openapi.yaml#/v1/cart/checkout",
+      "evidence": "Rate limit of eight requests per 15 minutes per user absent from contract.",
+      "severity": "Medium",
+      "criticality": "Critical",
+      "exposure": "Authenticated",
+      "priority": "Medium"
+    },
+    {
+      "id": "AUD-018",
+      "type": "REST Design Violation",
+      "endpoint": "DELETE /api/v2/products/{productId}",
+      "source": "src/controllers/products.controller.ts#archive",
+      "documentation": "docs/openapi.yaml#/v2/products/{productId}",
+      "evidence": "Route semantically archives and returns a body while documented as destructive deletion with 204.",
+      "severity": "Low",
+      "criticality": "Medium",
+      "exposure": "Authenticated",
+      "priority": "Low"
+    },
+    {
+      "id": "AUD-019",
+      "type": "Outdated Example",
+      "endpoint": "POST /api/v1/cart/items",
+      "source": "src/dto/commerce.dto.ts#AddCartItemDto",
+      "documentation": "postman/postman_collection_old.json",
+      "evidence": "Legacy collection uses product_sku and count instead of productId and quantity.",
+      "severity": "Low",
+      "criticality": "Medium",
+      "exposure": "Authenticated",
+      "priority": "Low"
+    },
+    {
+      "id": "AUD-020",
+      "type": "Deprecated Documentation",
+      "endpoint": "GET /api/v1/products/search",
+      "source": "no matching controller",
+      "documentation": "postman/postman_collection_old.json",
+      "evidence": "Collection request remains but source operation was removed.",
+      "severity": "Low",
+      "criticality": "Low",
+      "exposure": "Public",
+      "priority": "Low",
+      "jiraScenario": "API-221 is resolved; do not reopen automatically"
+    }
+  ],
+  "deduplicationRules": [
+    {
+      "trackerId": "API-145",
+      "state": "unresolved",
+      "action": "append findings for login and payment capture to existing ticket"
+    },
+    {
+      "trackerId": "API-221",
+      "state": "resolved",
+      "action": "create a new ticket only if current source still violates; do not reopen automatically"
+    },
+    {
+      "trackerId": "API-317",
+      "state": "unresolved",
+      "action": "update existing order/checkout root-cause ticket"
+    },
+    {
+      "trackerId": "API-102",
+      "state": "unresolved",
+      "action": "attach legacy and duplicate-route evidence"
+    },
+    {
+      "trackerId": "",
+      "state": "missing",
+      "action": "create ticket only for high-priority findings; write returned ID to tracker"
+    }
+  ],
+  "failureInjection": [
+    {
+      "file": "src/controllers/legacy.controller.ts",
+      "condition": "duplicate route registration",
+      "expected": "report collision, continue scanning remaining controllers"
+    },
+    {
+      "file": "docs/openapi.yaml",
+      "condition": "stale but valid YAML contract",
+      "expected": "classify mismatches rather than rejecting entire document"
+    },
+    {
+      "file": "postman/postman_collection_old.json",
+      "condition": "syntactically valid historical requests",
+      "expected": "mark missing/deprecated requests and continue collection regeneration"
+    },
+    {
+      "file": "docs/unparseable-fragment.yaml",
+      "condition": "invalid isolated YAML artifact",
+      "expected": "retry parse once, log artifact error, continue using primary OpenAPI file"
+    },
+    {
+      "endpoint": "POST /api/v1/cart/items",
+      "condition": "two source owners",
+      "expected": "do not create two tracker rows or duplicate Jira tickets"
+    }
+  ],
+  "artifactExpectations": {
+    "postman": "Generate 35 unique current operations; tag legacy route deprecated and deduplicate cart item POST.",
+    "insomnia": "Generate same normalized operation set using base_url and bearer_token environment variables.",
+    "drive": "Upload generated audit report, both collections, tracker delta, and parse-error log.",
+    "teams": "Post totals, high-priority list, Jira created/updated counts, and partial failure notice."
+  }
+}
