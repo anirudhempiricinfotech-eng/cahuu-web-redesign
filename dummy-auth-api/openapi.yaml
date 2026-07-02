@@ -1,0 +1,344 @@
+openapi: 3.0.3
+info:
+  title: Cahuu Dummy Auth API
+  version: 1.0.0
+  description: >
+    Local-only, in-memory test API. All people, email addresses and tokens in this
+    specification are fictional. Do not use this service for real authentication.
+servers:
+  - url: http://127.0.0.1:3000
+    description: Local test server
+tags:
+  - name: System
+  - name: Auth
+paths:
+  /health:
+    get:
+      tags: [System]
+      operationId: getHealth
+      summary: Check service health
+      responses:
+        "200":
+          description: Service is available
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, service, apiVersion, now]
+                properties:
+                  status: { type: string, example: ok }
+                  service: { type: string, example: cahuu-dummy-auth-api }
+                  apiVersion: { type: string, example: v1 }
+                  now: { type: string, format: date-time, example: "2026-07-02T10:15:00.000Z" }
+  /api/v1/auth/signup:
+    post:
+      tags: [Auth]
+      operationId: signup
+      summary: Create a dummy user and session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SignupRequest" }
+            example:
+              name: Maya Shah
+              email: maya.shah@example.test
+              password: RiverStone8
+              acceptTerms: true
+      responses:
+        "201":
+          description: User and session created
+          headers:
+            Location:
+              schema: { type: string, example: /api/v1/auth/session }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthResponse" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "409": { $ref: "#/components/responses/EmailConflict" }
+        "413": { $ref: "#/components/responses/PayloadTooLarge" }
+  /api/v1/auth/login:
+    post:
+      tags: [Auth]
+      operationId: login
+      summary: Create a session from email and password
+      description: Limited to five attempts per source address per minute.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/LoginRequest" }
+            example:
+              email: aarav.mehta@example.test
+              password: CahuuDemo9
+      responses:
+        "200":
+          description: Login succeeded
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthResponse" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/InvalidCredentials" }
+        "429":
+          description: Login rate limit exceeded
+          headers:
+            Retry-After:
+              schema: { type: integer, example: 54 }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+              example:
+                error:
+                  status: 429
+                  code: RATE_LIMITED
+                  message: Too many login attempts. Try again later.
+                  timestamp: "2026-07-02T10:15:00.000Z"
+  /api/v1/auth/refresh:
+    post:
+      tags: [Auth]
+      operationId: refreshSession
+      summary: Rotate a dummy refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string, minLength: 1, example: dummy_refresh_bm90LXJlYWwtdG9rZW4 }
+      responses:
+        "200":
+          description: A new session was issued and the supplied refresh token was revoked
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [session]
+                properties:
+                  session: { $ref: "#/components/schemas/SessionTokens" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401":
+          description: Refresh token is invalid, expired or already rotated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+  /api/v1/auth/forgot-password:
+    post:
+      tags: [Auth]
+      operationId: forgotPassword
+      summary: Queue password-reset instructions
+      description: Returns the same response for existing and nonexistent users.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [email]
+              properties:
+                email: { type: string, format: email, example: aarav.mehta@example.test }
+      responses:
+        "202":
+          description: Generic privacy-preserving acknowledgement
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [message]
+                properties:
+                  message:
+                    type: string
+                    example: If that account exists, password-reset instructions have been queued.
+        "400": { $ref: "#/components/responses/ValidationError" }
+  /api/v1/auth/reset-password:
+    post:
+      tags: [Auth]
+      operationId: resetPassword
+      summary: Update a password with a reset token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [resetToken, newPassword]
+              properties:
+                resetToken: { type: string, minLength: 1, example: dummy-reset-token-aarav-2026 }
+                newPassword:
+                  type: string
+                  minLength: 8
+                  maxLength: 72
+                  pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,72}$"
+                  example: NewCahuuPass7
+      responses:
+        "200":
+          description: Password updated and existing sessions revoked
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [message]
+                properties:
+                  message:
+                    type: string
+                    example: Password updated. Sign in again with the new password.
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401":
+          description: Reset token is invalid or expired
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+  /api/v1/auth/session:
+    get:
+      tags: [Auth]
+      operationId: getSession
+      summary: Return the user associated with the access token
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Current user and expiry
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [user, session]
+                properties:
+                  user: { $ref: "#/components/schemas/PublicUser" }
+                  session:
+                    type: object
+                    required: [expiresAt]
+                    properties:
+                      expiresAt: { type: string, format: date-time, example: "2026-07-02T10:30:00.000Z" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    delete:
+      tags: [Auth]
+      operationId: logout
+      summary: Revoke the supplied access token
+      security:
+        - bearerAuth: []
+      responses:
+        "204": { description: Access token revoked }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque dummy token
+  schemas:
+    SignupRequest:
+      type: object
+      additionalProperties: false
+      required: [name, email, password, acceptTerms]
+      properties:
+        name: { type: string, minLength: 2, maxLength: 80, example: Maya Shah }
+        email: { type: string, format: email, maxLength: 254, example: maya.shah@example.test }
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 72
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,72}$"
+          example: RiverStone8
+        acceptTerms: { type: boolean, enum: [true], example: true }
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, example: aarav.mehta@example.test }
+        password: { type: string, minLength: 1, format: password, example: CahuuDemo9 }
+    PublicUser:
+      type: object
+      required: [id, name, email, roles, createdAt]
+      properties:
+        id: { type: string, format: uuid, example: 7b301d54-a817-4604-9c9c-43248f81226f }
+        name: { type: string, example: Aarav Mehta }
+        email: { type: string, format: email, example: aarav.mehta@example.test }
+        roles:
+          type: array
+          items: { type: string }
+          example: [user]
+        createdAt: { type: string, format: date-time, example: "2026-07-02T09:00:00.000Z" }
+    SessionTokens:
+      type: object
+      required: [tokenType, accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn]
+      properties:
+        tokenType: { type: string, enum: [Bearer] }
+        accessToken: { type: string, example: dummy_access_bm90LXJlYWwtdG9rZW4 }
+        accessTokenExpiresIn: { type: integer, example: 900 }
+        refreshToken: { type: string, example: dummy_refresh_bm90LXJlYWwtdG9rZW4 }
+        refreshTokenExpiresIn: { type: integer, example: 604800 }
+    AuthResponse:
+      type: object
+      required: [user, session]
+      properties:
+        user: { $ref: "#/components/schemas/PublicUser" }
+        session: { $ref: "#/components/schemas/SessionTokens" }
+    Error:
+      type: object
+      required: [status, code, message, timestamp]
+      properties:
+        status: { type: integer, example: 400 }
+        code: { type: string, example: VALIDATION_ERROR }
+        message: { type: string, example: One or more fields are invalid. }
+        timestamp: { type: string, format: date-time, example: "2026-07-02T10:15:00.000Z" }
+        details:
+          type: array
+          items:
+            type: object
+            required: [field, rule]
+            properties:
+              field: { type: string, example: password }
+              rule: { type: string, example: required; 8-72 characters with uppercase, lowercase and digit }
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error: { $ref: "#/components/schemas/Error" }
+  responses:
+    ValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorResponse" }
+          example:
+            error:
+              status: 400
+              code: VALIDATION_ERROR
+              message: One or more fields are invalid.
+              timestamp: "2026-07-02T10:15:00.000Z"
+              details:
+                - field: password
+                  rule: required; 8-72 characters with uppercase, lowercase and digit
+    InvalidCredentials:
+      description: Email or password did not match
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorResponse" }
+          example:
+            error:
+              status: 401
+              code: INVALID_CREDENTIALS
+              message: Email or password is incorrect.
+              timestamp: "2026-07-02T10:15:00.000Z"
+    Unauthorized:
+      description: Bearer access token is missing, invalid or expired
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorResponse" }
+    EmailConflict:
+      description: An account already exists for the normalized email
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorResponse" }
+    PayloadTooLarge:
+      description: Request body exceeds 1 MiB
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorResponse" }
