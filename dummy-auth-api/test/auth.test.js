@@ -203,6 +203,33 @@ test("dummy Auth API end-to-end behaviour", async (t) => {
     assert.equal(session.body.error.code, "INVALID_ACCESS_TOKEN");
   });
 
+  await t.test("login rate limiting returns 429 with Retry-After", async () => {
+    for (let attempt = 1; attempt <= 5; attempt += 1) {
+      const result = await request("/api/v1/auth/login", {
+        method: "POST",
+        headers: { "x-forwarded-for": "198.51.100.42" },
+        json: {
+          email: "aarav.mehta@example.test",
+          password: "WrongPass9",
+        },
+      });
+      assert.equal(result.status, 401);
+      assert.equal(result.body.error.code, "INVALID_CREDENTIALS");
+    }
+
+    const limited = await request("/api/v1/auth/login", {
+      method: "POST",
+      headers: { "x-forwarded-for": "198.51.100.42" },
+      json: {
+        email: "aarav.mehta@example.test",
+        password: "WrongPass9",
+      },
+    });
+    assert.equal(limited.status, 429);
+    assert.equal(limited.body.error.code, "RATE_LIMITED");
+    assert.ok(Number(limited.headers.get("retry-after")) >= 1);
+  });
+
   await t.test("unknown routes return a structured 404", async () => {
     const result = await request("/api/v1/auth/missing");
     assert.equal(result.status, 404);
