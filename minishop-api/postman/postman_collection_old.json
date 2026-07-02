@@ -1,0 +1,511 @@
+{
+  "info": {
+    "_postman_id": "3c03f82a-e59f-45ef-8491-1beed153d644",
+    "name": "MiniShop API – legacy 2024.11",
+    "description": "Historical collection retained intentionally for audit drift detection. Contains obsolete paths and request bodies.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "legacy_base_url",
+      "value": "https://api.staging.minishop.invalid/api"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{legacy_access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/auth/signup",
+              "host": [
+                "{{legacy_base_url}}/v1/auth/signup"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"kavya.menon@malabarcrafts.in\",\n  \"password\": \"Nila!River7\",\n  \"name\": \"Kavya Menon\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sign in",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/auth/login",
+              "host": [
+                "{{legacy_base_url}}/v1/auth/login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"kmenon\",\n  \"password\": \"Nila!River7\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get my profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/profile",
+              "host": [
+                "{{legacy_base_url}}/v1/profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/profile",
+              "host": [
+                "{{legacy_base_url}}/v1/profile"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Kavya Menon\",\n  \"mobile\": \"+919845612730\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/products?page=1&pageSize=50",
+              "host": [
+                "{{legacy_base_url}}/v1/products?page=1&pageSize=50"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search products (removed)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/products/search?q=kettle",
+              "host": [
+                "{{legacy_base_url}}/v1/products/search?q=kettle"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Product detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/product/b51f34f6-daa3-4f1e-a573-f8b77db56027",
+              "host": [
+                "{{legacy_base_url}}/v1/product/b51f34f6-daa3-4f1e-a573-f8b77db56027"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/products",
+              "host": [
+                "{{legacy_base_url}}/v1/products"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_code\": \"KORI-710482\",\n  \"title\": \"Kori Brass Masala Box\",\n  \"price\": 8699\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Category list",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/categories",
+              "host": [
+                "{{legacy_base_url}}/v1/categories"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Submit order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/orders",
+              "host": [
+                "{{legacy_base_url}}/v1/orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"products\": [\n    {\n      \"sku\": \"AUR-48271\",\n      \"count\": 1\n    }\n  ],\n  \"address_id\": \"e9cc8088-63cf-4aac-bb26-2282a9bc86ac\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/order-history",
+              "host": [
+                "{{legacy_base_url}}/v1/order-history"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Read basket",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/basket",
+              "host": [
+                "{{legacy_base_url}}/v1/basket"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add basket product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/cart/items",
+              "host": [
+                "{{legacy_base_url}}/v1/cart/items"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_sku\": \"AUR-48271\",\n  \"count\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout basket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/cart/checkout",
+              "host": [
+                "{{legacy_base_url}}/v1/cart/checkout"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"26 Nandidurga Road, Bengaluru\",\n  \"paymentMethod\": \"card_8pYz7Xq4Wm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Authorize payment (removed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/payments/authorize",
+              "host": [
+                "{{legacy_base_url}}/v1/payments/authorize"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"51426837-cb0c-4b56-85cf-a0ea7b62dc81\",\n  \"amount\": 12498\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "item": [
+        {
+          "name": "Get stock",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/stock/AUR-48271",
+              "host": [
+                "{{legacy_base_url}}/v1/stock/AUR-48271"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Catalog CSV import (removed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{legacy_base_url}}/v1/admin/catalog/import",
+              "host": [
+                "{{legacy_base_url}}/v1/admin/catalog/import"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source_url\": \"https://assets.minishop.invalid/catalog/july-2024.csv\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
