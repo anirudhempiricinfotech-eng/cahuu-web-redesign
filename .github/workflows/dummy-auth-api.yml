@@ -3,6 +3,7 @@ name: Dummy Auth API
 on:
   push:
     branches:
+      - main
       - codex/dummy-auth-api
     paths:
       - "dummy-auth-api/**"
