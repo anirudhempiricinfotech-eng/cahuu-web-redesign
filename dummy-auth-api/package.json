@@ -1,0 +1,14 @@
+{
+  "name": "cahuu-dummy-auth-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dependency-free dummy Auth API for local integration and documentation testing.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/auth.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
