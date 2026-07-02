@@ -1,0 +1,31 @@
+name: Dummy Auth API
+
+on:
+  push:
+    branches:
+      - codex/dummy-auth-api
+    paths:
+      - "dummy-auth-api/**"
+      - ".github/workflows/dummy-auth-api.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dummy-auth-api
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: dummy-auth-api/package.json
+      - name: Run tests
+        run: npm test
