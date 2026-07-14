@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "1.0",
+  "fixtureMode": true,
+  "warning": "Synthetic Jira Cloud data. Domains, account IDs, users, and issue URLs are non-routable and intended for test doubles or controlled imports only.",
+  "project": {
+    "id": "10000",
+    "key": "API",
+    "name": "MiniShop API Documentation",
+    "projectTypeKey": "software",
+    "simplified": true,
+    "lead": {
+      "accountId": "5e14e2a4c90d8f0abc100101",
+      "displayName": "Nandita Bose"
+    }
+  },
+  "issueTypes": [
+    {
+      "id": "10001",
+      "name": "Bug"
+    },
+    {
+      "id": "10002",
+      "name": "Task"
+    },
+    {
+      "id": "10004",
+      "name": "Story"
+    }
+  ],
+  "priorities": [
+    {
+      "id": "1",
+      "name": "Highest"
+    },
+    {
+      "id": "2",
+      "name": "High"
+    },
+    {
+      "id": "3",
+      "name": "Medium"
+    },
+    {
+      "id": "4",
+      "name": "Low"
+    }
+  ],
+  "statuses": [
+    {
+      "id": "10000",
+      "name": "To Do",
+      "category": "new"
+    },
+    {
+      "id": "10002",
+      "name": "Selected for Development",
+      "category": "new"
+    },
+    {
+      "id": "3",
+      "name": "In Progress",
+      "category": "indeterminate"
+    },
+    {
+      "id": "10003",
+      "name": "Blocked",
+      "category": "indeterminate"
+    },
+    {
+      "id": "10001",
+      "name": "Done",
+      "category": "done"
+    }
+  ],
+  "components": [
+    {
+      "id": "10020",
+      "name": "Authentication"
+    },
+    {
+      "id": "10021",
+      "name": "Cart"
+    },
+    {
+      "id": "10022",
+      "name": "Users"
+    },
+    {
+      "id": "10023",
+      "name": "Orders"
+    },
+    {
+      "id": "10024",
+      "name": "Payments"
+    },
+    {
+      "id": "10025",
+      "name": "Checkout"
+    },
+    {
+      "id": "10026",
+      "name": "Catalog"
+    },
+    {
+      "id": "10027",
+      "name": "Shared API Standards"
+    },
+    {
+      "id": "10028",
+      "name": "Inventory"
+    }
+  ],
+  "customFields": [
+    {
+      "id": "customfield_10042",
+      "name": "Affected Endpoint"
+    },
+    {
+      "id": "customfield_10043",
+      "name": "Evidence Files"
+    },
+    {
+      "id": "customfield_10044",
+      "name": "Audit Severity"
+    },
+    {
+      "id": "customfield_10045",
+      "name": "Exposure"
+    }
+  ],
+  "users": [
+    {
+      "accountId": "5e14e2a4c90d8f0abc100101",
+      "displayName": "Nandita Bose",
+      "role": "QA Lead"
+    },
+    {
+      "accountId": "5e14e2a4c90d8f0abc100103",
+      "displayName": "Vivek Nair",
+      "role": "Technical Writer"
+    },
+    {
+      "accountId": "5e14e2a4c90d8f0abc100204",
+      "displayName": "Rohan Kulkarni",
+      "role": "Backend Engineer"
+    },
+    {
+      "accountId": "5e14e2a4c90d8f0abc100207",
+      "displayName": "Aditi Shah",
+      "role": "Platform Engineer"
+    },
+    {
+      "accountId": "5e14e2a4c90d8f0abc100209",
+      "displayName": "Farah Siddiqui",
+      "role": "API Designer"
+    },
+    {
+      "accountId": "5e14e2a4c90d8f0abc100213",
+      "displayName": "Ishaan Deshpande",
+      "role": "Commerce Engineer"
+    }
+  ]
+}

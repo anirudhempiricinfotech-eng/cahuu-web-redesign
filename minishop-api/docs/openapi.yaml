@@ -1,0 +1,269 @@
+openapi: 3.0.3
+info:
+  title: MiniShop API
+  version: 2.1.0
+  description: Published contract last reviewed 2025-11-18. It intentionally trails selected source behavior for audit-workflow testing.
+servers:
+  - url: https://api.staging.minishop.invalid/api
+security:
+  - bearerAuth: []
+paths:
+  /v1/auth/register:
+    post:
+      summary: Register customer
+      security: []
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: '#/components/schemas/RegisterRequest'}, example: {email: kavya.menon@malabarcrafts.in, password: Nila!River7, displayName: Kavya Menon}}}
+      responses:
+        '201': {description: Registered, content: {application/json: {schema: {$ref: '#/components/schemas/SessionResponse'}}}}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '409': {$ref: '#/components/responses/Conflict'}
+  /v1/auth/login:
+    post:
+      summary: Authenticate customer
+      security: []
+      requestBody:
+        required: true
+        content: {application/json: {schema: {type: object, required: [username,password], properties: {username: {type: string}, password: {type: string, minLength: 8}}}, example: {username: kmenon, password: Nila!River7}}}
+      responses:
+        '200': {description: Authenticated, content: {application/json: {schema: {$ref: '#/components/schemas/SessionResponse'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /v1/users/me:
+    get:
+      summary: Current user profile
+      responses:
+        '200': {description: Profile, content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    patch:
+      summary: Update current profile
+      requestBody:
+        content: {application/json: {schema: {type: object, properties: {displayName: {type: string, maxLength: 80}}}}}
+      responses:
+        '200': {description: Updated, content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}
+  /v2/products:
+    get:
+      summary: Search catalogue
+      security: []
+      parameters:
+        - {in: query, name: page, schema: {type: integer, minimum: 1}}
+        - {in: query, name: limit, schema: {type: integer, minimum: 1, maximum: 100}}
+        - {in: query, name: categoryId, schema: {type: string, format: uuid}}
+      responses:
+        '200': {description: Products, content: {application/json: {schema: {type: object, properties: {data: {type: array, items: {$ref: '#/components/schemas/Product'}}, meta: {$ref: '#/components/schemas/PageMeta'}}}}}}
+    post:
+      summary: Create product
+      description: Requires manager or administrator.
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ProductWrite'}}}}
+      responses:
+        '201': {description: Created, content: {application/json: {schema: {$ref: '#/components/schemas/Product'}}}}
+        '409': {$ref: '#/components/responses/Conflict'}
+  /v2/products/{productId}:
+    parameters:
+      - {$ref: '#/components/parameters/ProductId'}
+    get:
+      summary: Get product
+      security: []
+      responses:
+        '200': {description: Product, content: {application/json: {schema: {$ref: '#/components/schemas/Product'}}}}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      summary: Update product
+      description: Requires manager or administrator.
+      requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/ProductWrite'}}}}
+      responses:
+        '200': {description: Updated, content: {application/json: {schema: {$ref: '#/components/schemas/Product'}}}}
+    delete:
+      summary: Delete product
+      description: Requires administrator.
+      responses:
+        '204': {description: Deleted}
+  /v2/categories:
+    get:
+      summary: List categories
+      security: []
+      responses:
+        '200': {description: Category list}
+    post:
+      summary: Add category
+      description: Requires administrator.
+      requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/CategoryWrite'}}}}
+      responses:
+        '201': {description: Created}
+  /v1/orders:
+    get:
+      summary: List caller orders
+      responses:
+        '200': {description: Orders}
+    post:
+      summary: Submit order
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/OrderWrite'}}}}
+      responses:
+        '201': {description: Created}
+        '409': {$ref: '#/components/responses/Conflict'}
+  /v1/orders/{orderId}:
+    get:
+      summary: Read order
+      parameters: [{$ref: '#/components/parameters/OrderId'}]
+      responses:
+        '200': {description: Order, content: {application/json: {schema: {$ref: '#/components/schemas/Order'}}}}
+        '404': {$ref: '#/components/responses/NotFound'}
+  /v1/orders/{orderId}/status:
+    patch:
+      summary: Change fulfillment state
+      parameters: [{$ref: '#/components/parameters/OrderId'}]
+      requestBody: {content: {application/json: {schema: {type: object, required: [status], properties: {status: {type: string, enum: [pending,paid,shipped,delivered,cancelled]}}}}}}
+      responses:
+        '200': {description: Updated}
+  /v1/cart:
+    get:
+      summary: Current cart
+      responses:
+        '200': {description: Cart}
+  /v1/cart/items:
+    post:
+      summary: Add cart item
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/CartItemWrite'}}}}
+      responses:
+        '201': {description: Added}
+        '409': {$ref: '#/components/responses/Conflict'}
+  /v1/cart/items/{itemId}:
+    patch:
+      summary: Change cart quantity
+      requestBody: {content: {application/json: {schema: {type: object, required: [quantity], properties: {quantity: {type: integer, minimum: 1, maximum: 99}}}}}}
+      responses:
+        '200': {description: Updated}
+    delete:
+      summary: Remove cart item
+      responses:
+        '204': {description: Removed}
+  /v1/cart/checkout:
+    post:
+      summary: Check out
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [address,paymentMethod], properties: {address: {type: string}, paymentMethod: {type: string}}}}}}
+      responses:
+        '201': {description: Checkout created}
+        '409': {$ref: '#/components/responses/Conflict'}
+  /v1/payments/{paymentId}:
+    get:
+      summary: Read payment
+      parameters: [{$ref: '#/components/parameters/PaymentId'}]
+      responses:
+        '200': {description: Payment, content: {application/json: {schema: {$ref: '#/components/schemas/Payment'}}}}
+  /v1/payments/{paymentId}/capture:
+    post:
+      summary: Capture payment
+      security: []
+      responses:
+        '200': {description: Captured}
+        '409': {$ref: '#/components/responses/Conflict'}
+  /v1/inventory:
+    get:
+      summary: Inventory snapshot
+      description: Requires manager or administrator.
+      responses:
+        '200': {description: Inventory list}
+  /v1/inventory/{productId}:
+    get:
+      summary: Product inventory
+      parameters: [{$ref: '#/components/parameters/ProductId'}]
+      responses:
+        '200': {description: Inventory}
+  /v1/inventory/{productId}/adjustments:
+    post:
+      summary: Adjust inventory
+      parameters: [{$ref: '#/components/parameters/ProductId'}]
+      requestBody: {content: {application/json: {schema: {type: object, required: [delta], properties: {delta: {type: integer}, reasonDetail: {type: string}}}}}}
+      responses:
+        '201': {description: Adjusted}
+  /v1/products/{productId}/reviews:
+    get:
+      summary: Approved reviews
+      parameters: [{$ref: '#/components/parameters/ProductId'}]
+      responses:
+        '200': {description: Reviews}
+    post:
+      summary: Submit review
+      parameters: [{$ref: '#/components/parameters/ProductId'}]
+      requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/ReviewWrite'}}}}
+      responses:
+        '201': {description: Submitted}
+  /v1/product/{id}:
+    get:
+      deprecated: true
+      security: []
+      summary: Legacy product lookup
+      parameters: [{in: path, name: id, required: true, schema: {type: string, format: uuid}}]
+      responses:
+        '200': {description: Product, content: {application/json: {schema: {$ref: '#/components/schemas/Product'}}}}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer, bearerFormat: JWT}
+  parameters:
+    ProductId: {in: path, name: productId, required: true, schema: {type: string, format: uuid}}
+    OrderId: {in: path, name: orderId, required: true, schema: {type: string, format: uuid}}
+    PaymentId: {in: path, name: paymentId, required: true, schema: {type: string, pattern: '^pay_[A-Za-z0-9]+$'}}
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [email,password,displayName]
+      properties:
+        email: {type: string, format: email}
+        password: {type: string, minLength: 8}
+        displayName: {type: string, minLength: 2, maxLength: 60}
+    SessionResponse:
+      type: object
+      properties:
+        accessToken: {type: string}
+        expiresIn: {type: integer}
+    User:
+      type: object
+      required: [id,email,displayName,role]
+      properties: {id: {type: string, format: uuid}, email: {type: string, format: email}, displayName: {type: string}, role: {type: string, enum: [customer,manager,admin]}}
+    ProductWrite:
+      type: object
+      required: [sku,name,pricePaise,categoryId]
+      properties:
+        sku: {type: string}
+        name: {type: string, minLength: 3, maxLength: 120}
+        description: {type: string}
+        pricePaise: {type: integer, minimum: 1}
+        categoryId: {type: string, format: uuid}
+        tags: {type: array, items: {type: string}}
+    Product:
+      allOf:
+        - {$ref: '#/components/schemas/ProductWrite'}
+        - {type: object, required: [id], properties: {id: {type: string, format: uuid}, active: {type: boolean}}}
+    PageMeta:
+      type: object
+      properties: {page: {type: integer}, limit: {type: integer}, total: {type: integer}}
+    CategoryWrite:
+      type: object
+      required: [name]
+      properties: {name: {type: string}, slug: {type: string}}
+    CartItemWrite:
+      type: object
+      required: [productId,quantity]
+      properties: {productId: {type: string, format: uuid}, quantity: {type: integer, minimum: 1, maximum: 99}}
+    OrderWrite:
+      type: object
+      required: [items]
+      properties: {items: {type: array, items: {$ref: '#/components/schemas/CartItemWrite'}}, addressId: {type: string, format: uuid}}
+    Order:
+      type: object
+      properties: {id: {type: string, format: uuid}, orderNumber: {type: string}, status: {type: string}, totalPaise: {type: integer}}
+    Payment:
+      type: object
+      properties: {id: {type: string}, orderId: {type: string, format: uuid}, provider: {type: string}, amountPaise: {type: integer}, status: {type: string}}
+    ReviewWrite:
+      type: object
+      required: [rating,comment]
+      properties: {rating: {type: integer, minimum: 1, maximum: 5}, comment: {type: string}}
+    Error:
+      type: object
+      properties: {code: {type: string}, message: {type: string}, details: {type: array, items: {type: object}}}
+  responses:
+    ValidationError: {description: Invalid request, content: {application/json: {schema: {$ref: '#/components/schemas/Error'}}}}
+    Unauthorized: {description: Authentication required, content: {application/json: {schema: {$ref: '#/components/schemas/Error'}}}}
+    NotFound: {description: Resource absent, content: {application/json: {schema: {$ref: '#/components/schemas/Error'}}}}
+    Conflict: {description: State conflict, content: {application/json: {schema: {$ref: '#/components/schemas/Error'}}}}

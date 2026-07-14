@@ -1,0 +1,1507 @@
+{
+  "meta": {
+    "operationCount": 35,
+    "generatedAt": "2026-07-02T10:45:12.000Z",
+    "currency": "INR",
+    "moneyUnit": "paise",
+    "note": "Examples cover all unique implemented operations. The second POST /api/v1/cart/items handler is tracked as a duplicate rather than a separate operation."
+  },
+  "commonResponseHeaders": {
+    "content-type": "application/json",
+    "x-correlation-id": "971ddb08-dacc-446a-b3ac-df8ad6ea2482"
+  },
+  "commonErrors": {
+    "validation": {
+      "status": 400,
+      "body": {
+        "code": "VALIDATION_FAILED",
+        "message": "Request validation failed",
+        "details": [
+          {
+            "field": "quantity",
+            "rule": "max",
+            "message": "quantity must not be greater than 20"
+          }
+        ]
+      }
+    },
+    "unauthorized": {
+      "status": 401,
+      "body": {
+        "code": "AUTH_REQUIRED",
+        "message": "A valid bearer token is required"
+      }
+    },
+    "notFound": {
+      "status": 404,
+      "body": {
+        "code": "RESOURCE_NOT_FOUND",
+        "message": "The requested resource was not found"
+      }
+    },
+    "conflict": {
+      "status": 409,
+      "body": {
+        "code": "RESOURCE_CONFLICT",
+        "message": "The request conflicts with current resource state"
+      }
+    }
+  },
+  "operations": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "successfulRequest": {
+        "email": "kavya.menon@malabarcrafts.in",
+        "password": "Nila!River7Grove",
+        "displayName": "Kavya Menon",
+        "phone": "+919845612730"
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "user": {
+              "id": "6d3e30f3-6b31-4b5c-a0c6-b70cd164a4a8",
+              "email": "kavya.menon@malabarcrafts.in",
+              "displayName": "Kavya Menon",
+              "role": "customer"
+            },
+            "accessToken": "eyJhbGciOiJSUzI1NiJ9.fixture.signature",
+            "expiresIn": 900
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "successfulRequest": {
+        "email": "meera.iyer@northwindatelier.in",
+        "password": "Monsoon!Gate4Azure"
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "accessToken": "eyJhbGciOiJSUzI1NiJ9.fixture.signature",
+            "refreshToken": "rfr_KV8pQd6nYXebGvM43tZc2A5N7mL1sU9X",
+            "expiresIn": 900
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "INVALID_CREDENTIALS",
+            "message": "Email or password is incorrect"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "successfulRequest": {
+        "refreshToken": "rfr_KV8pQd6nYXebGvM43tZc2A5N7mL1sU9X"
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "accessToken": "eyJhbGciOiJSUzI1NiJ9.refreshed.signature",
+            "expiresIn": 900
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "REFRESH_TOKEN_REJECTED",
+            "message": "The refresh token has expired or been rotated"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 204,
+        "body": null
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/me",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "84f45098-b5e5-4b27-8238-89eedf549cce",
+            "email": "meera.iyer@northwindatelier.in",
+            "displayName": "Meera Iyer",
+            "role": "customer",
+            "phone": "+919821476530"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        }
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/users/me",
+      "successfulRequest": {
+        "displayName": "Meera Lakshmi Iyer",
+        "bio": "Textile designer, slow traveller, and specialty coffee enthusiast."
+      },
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "84f45098-b5e5-4b27-8238-89eedf549cce",
+            "email": "meera.iyer@northwindatelier.in",
+            "displayName": "Meera Lakshmi Iyer",
+            "role": "customer",
+            "phone": "+919821476530"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        }
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/users/84f45098-b5e5-4b27-8238-89eedf549cce/role",
+      "successfulRequest": {
+        "role": "manager"
+      },
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "84f45098-b5e5-4b27-8238-89eedf549cce",
+            "email": "meera.iyer@northwindatelier.in",
+            "displayName": "Meera Iyer",
+            "role": "manager",
+            "phone": "+919821476530"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 403,
+          "body": {
+            "code": "FORBIDDEN",
+            "message": "users:roles:write permission is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/84f45098-b5e5-4b27-8238-89eedf549cce",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "deletionScheduledAt": "2026-07-09T08:30:00.000Z"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 403,
+          "body": {
+            "code": "FORBIDDEN",
+            "message": "Administrator access is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products?page=1&limit=20&search=aurora&sort=price",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "id": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+              "sku": "AUR-48271",
+              "name": "Aurora Pour-Over Kettle",
+              "description": "Stainless steel temperature-control kettle for precision brewing.",
+              "pricePaise": 749900,
+              "availableQuantity": 18,
+              "averageRating": 4.7
+            }
+          ],
+          "meta": {
+            "page": 1,
+            "limit": 20,
+            "total": 1
+          }
+        }
+      },
+      "errorExamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products/b51f34f6-daa3-4f1e-a573-f8b77db56027",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "sku": "AUR-48271",
+            "name": "Aurora Pour-Over Kettle",
+            "description": "Stainless steel temperature-control kettle for precision brewing.",
+            "pricePaise": 749900,
+            "availableQuantity": 18,
+            "averageRating": 4.7
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/products",
+      "successfulRequest": {
+        "sku": "KORI-710482",
+        "name": "Kori Brass Masala Box",
+        "description": "Hand-spun seven-cup spice keeper with an engraved teak lid.",
+        "pricePaise": 869900,
+        "categoryId": "14aeb17e-b1e0-4a70-a87d-0d841a4f95ec",
+        "tags": [
+          "kitchen",
+          "brass"
+        ],
+        "active": true
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "f1890409-c36d-48b7-a195-4b7b5c42a501",
+            "sku": "KORI-710482",
+            "name": "Kori Brass Masala Box",
+            "pricePaise": 869900,
+            "availableQuantity": 0,
+            "averageRating": 0
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/products/b51f34f6-daa3-4f1e-a573-f8b77db56027",
+      "successfulRequest": {
+        "pricePaise": 729900,
+        "description": "Updated variable-temperature kettle with a precision gooseneck spout."
+      },
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "sku": "AUR-48271",
+            "name": "Aurora Pour-Over Kettle",
+            "description": "Stainless steel temperature-control kettle for precision brewing.",
+            "pricePaise": 729900,
+            "availableQuantity": 18,
+            "averageRating": 4.7
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/products/b51f34f6-daa3-4f1e-a573-f8b77db56027",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "sku": "AUR-48271",
+            "name": "Aurora Pour-Over Kettle",
+            "description": "Stainless steel temperature-control kettle for precision brewing.",
+            "pricePaise": 749900,
+            "availableQuantity": 18,
+            "averageRating": 4.7,
+            "active": false,
+            "archivedAt": "2026-07-02T10:45:12.000Z"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/categories",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "id": "14aeb17e-b1e0-4a70-a87d-0d841a4f95ec",
+              "name": "Specialty Kitchen",
+              "slug": "specialty-kitchen"
+            }
+          ]
+        }
+      },
+      "errorExamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/categories/14aeb17e-b1e0-4a70-a87d-0d841a4f95ec/products",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "id": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+              "sku": "AUR-48271",
+              "name": "Aurora Pour-Over Kettle",
+              "description": "Stainless steel temperature-control kettle for precision brewing.",
+              "pricePaise": 749900,
+              "availableQuantity": 18,
+              "averageRating": 4.7
+            }
+          ]
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/categories",
+      "successfulRequest": {
+        "name": "Indian Tableware",
+        "slug": "indian-tableware"
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "26cd0da3-e127-46cc-867b-6cc7a4148e7f",
+            "name": "Indian Tableware",
+            "slug": "indian-tableware"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/orders",
+      "successfulRequest": {
+        "items": [
+          {
+            "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "quantity": 1
+          }
+        ],
+        "shippingAddress": {
+          "recipient": "Kavya Menon",
+          "line1": "17 Vellayambalam Avenue",
+          "line2": "Near Kanakakunnu Palace",
+          "postalCode": "695010",
+          "city": "Thiruvananthapuram",
+          "state": "Kerala",
+          "countryCode": "IN"
+        }
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "51426837-cb0c-4b56-85cf-a0ea7b62dc81",
+            "orderNumber": "MS-2026-008427",
+            "status": "pending",
+            "totalPaise": 749900
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "INSUFFICIENT_STOCK",
+            "message": "Aurora Pour-Over Kettle has only 18 units available"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders?status=paid&page=1&limit=20&sort=-createdAt",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "id": "51426837-cb0c-4b56-85cf-a0ea7b62dc81",
+              "orderNumber": "MS-2026-008427",
+              "status": "paid",
+              "totalPaise": 1249800,
+              "createdAt": "2026-06-29T14:23:18.000Z"
+            }
+          ],
+          "meta": {
+            "page": 1,
+            "limit": 20,
+            "total": 1
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders/51426837-cb0c-4b56-85cf-a0ea7b62dc81",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "51426837-cb0c-4b56-85cf-a0ea7b62dc81",
+            "orderNumber": "MS-2026-008427",
+            "status": "paid",
+            "totalPaise": 1249800,
+            "estimatedDeliveryAt": "2026-07-05T18:30:00.000Z"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/orders/51426837-cb0c-4b56-85cf-a0ea7b62dc81/status",
+      "successfulRequest": {
+        "status": "fulfilling"
+      },
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "51426837-cb0c-4b56-85cf-a0ea7b62dc81",
+            "status": "fulfilling",
+            "updatedAt": "2026-07-02T10:45:12.000Z"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "a997ea50-bc16-4fe3-a4f1-a41bf991aa92",
+            "items": [
+              {
+                "id": "7ea64e33-5eea-4178-b26c-d67407cdf5f8",
+                "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+                "quantity": 1,
+                "unitPricePaise": 749900
+              }
+            ],
+            "subtotalPaise": 749900
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/cart/items",
+      "successfulRequest": {
+        "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+        "quantity": 1
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "7ea64e33-5eea-4178-b26c-d67407cdf5f8",
+            "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "quantity": 1,
+            "unitPricePaise": 749900
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/cart/items/7ea64e33-5eea-4178-b26c-d67407cdf5f8",
+      "successfulRequest": {
+        "quantity": 2
+      },
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "7ea64e33-5eea-4178-b26c-d67407cdf5f8",
+            "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "quantity": 2,
+            "unitPricePaise": 749900
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/cart/items/7ea64e33-5eea-4178-b26c-d67407cdf5f8",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "removed": true
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/cart/checkout",
+      "successfulRequest": {
+        "shippingAddress": {
+          "recipient": "Kavya Menon",
+          "line1": "17 Vellayambalam Avenue",
+          "line2": "Near Kanakakunnu Palace",
+          "postalCode": "695010",
+          "city": "Thiruvananthapuram",
+          "state": "Kerala",
+          "countryCode": "IN"
+        },
+        "paymentProvider": "stripe",
+        "promotionCode": "MONSOON15"
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "chk_9PZn7eVyR2G4wK8M",
+            "orderId": "51426837-cb0c-4b56-85cf-a0ea7b62dc81",
+            "paymentStatus": "requires_action",
+            "clientAction": {
+              "type": "redirect",
+              "expiresAt": "2026-07-02T11:00:00.000Z"
+            }
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/payments/pay_7Vh2Kq5Nr8M",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "pay_7Vh2Kq5Nr8M",
+            "orderId": "51426837-cb0c-4b56-85cf-a0ea7b62dc81",
+            "provider": "stripe",
+            "providerReference": "pi_3PZ9xN2eZvKYlo2C0fKbqYpA",
+            "amountPaise": 1249800,
+            "status": "captured",
+            "capturedAt": "2026-06-29T14:27:52.000Z"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/payments/pay_7Vh2Kq5Nr8M/capture",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "pay_7Vh2Kq5Nr8M",
+            "status": "captured",
+            "capturedAt": "2026-07-02T10:45:12.000Z"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "PAYMENT_ALREADY_CAPTURED",
+            "message": "Payment pay_7Vh2Kq5Nr8M is already captured"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/payments/pay_7Vh2Kq5Nr8M/refunds",
+      "successfulRequest": {
+        "amountPaise": 249900,
+        "reason": "Returned item arrived with a damaged temperature-control dial."
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "rf_4Jc91pXzN6Qy2mLT",
+            "paymentId": "pay_7Vh2Kq5Nr8M",
+            "amountPaise": 249900,
+            "status": "submitted"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/inventory?lowStockOnly=true&warehouseId=30a581f1-1d72-4300-9fb1-8424ff7ddd46&page=1&limit=50",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+              "sku": "AUR-48271",
+              "onHand": 21,
+              "reserved": 3,
+              "available": 18,
+              "reorderLevel": 8
+            }
+          ],
+          "meta": {
+            "page": 1,
+            "limit": 50,
+            "total": 1
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/inventory/b51f34f6-daa3-4f1e-a573-f8b77db56027",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "onHand": 21,
+            "reserved": 3,
+            "available": 18,
+            "reorderLevel": 8
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/inventory/b51f34f6-daa3-4f1e-a573-f8b77db56027/adjustments",
+      "successfulRequest": {
+        "delta": -2,
+        "reasonDetail": "Two units quarantined after incoming-inspection handle defects."
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "92b6e233-2047-4125-8381-f6a7d20e16d8",
+            "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "previousOnHand": 21,
+            "newOnHand": 19,
+            "delta": -2
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products/b51f34f6-daa3-4f1e-a573-f8b77db56027/reviews?page=1&limit=10&rating=5",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "id": "9e1378a7-754d-4ece-b27e-ddb64d32d7cb",
+              "rating": 5,
+              "comment": "The temperature hold stays accurate through a full brew cycle.",
+              "reviewerDisplayName": "Ananya Rao",
+              "createdAt": "2026-06-18T09:12:44.000Z"
+            }
+          ],
+          "meta": {
+            "page": 1,
+            "limit": 10,
+            "total": 1
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/products/b51f34f6-daa3-4f1e-a573-f8b77db56027/reviews",
+      "successfulRequest": {
+        "rating": 5,
+        "comment": "Precise temperature control made my lighter roasts noticeably sweeter."
+      },
+      "successfulResponse": {
+        "status": 201,
+        "body": {
+          "data": {
+            "id": "9e1378a7-754d-4ece-b27e-ddb64d32d7cb",
+            "productId": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "rating": 5,
+            "approved": false
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 400,
+          "body": {
+            "code": "VALIDATION_FAILED",
+            "message": "Request validation failed",
+            "details": [
+              {
+                "field": "quantity",
+                "rule": "max",
+                "message": "quantity must not be greater than 20"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/reviews/9e1378a7-754d-4ece-b27e-ddb64d32d7cb",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "9e1378a7-754d-4ece-b27e-ddb64d32d7cb",
+            "moderationState": "removed",
+            "removedAt": "2026-07-02T10:45:12.000Z"
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 401,
+          "body": {
+            "code": "AUTH_REQUIRED",
+            "message": "A valid bearer token is required"
+          }
+        },
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "code": "RESOURCE_CONFLICT",
+            "message": "The request conflicts with current resource state"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/product/b51f34f6-daa3-4f1e-a573-f8b77db56027",
+      "successfulRequest": null,
+      "successfulResponse": {
+        "status": 200,
+        "body": {
+          "data": {
+            "id": "b51f34f6-daa3-4f1e-a573-f8b77db56027",
+            "sku": "AUR-48271",
+            "name": "Aurora Pour-Over Kettle",
+            "description": "Stainless steel temperature-control kettle for precision brewing.",
+            "pricePaise": 749900,
+            "availableQuantity": 18,
+            "averageRating": 4.7
+          },
+          "meta": {
+            "deprecation": {
+              "sunset": "2026-09-30",
+              "successor": "/api/v2/products/b51f34f6-daa3-4f1e-a573-f8b77db56027"
+            }
+          }
+        }
+      },
+      "errorExamples": [
+        {
+          "status": 404,
+          "body": {
+            "code": "RESOURCE_NOT_FOUND",
+            "message": "The requested resource was not found"
+          }
+        }
+      ]
+    }
+  ]
+}

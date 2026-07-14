@@ -1,0 +1,7 @@
+# Intentional isolated failure fixture. Do not add this fragment to openapi.yaml.
+components:
+  schemas:
+    BrokenFixture:
+      type: object
+      properties:
+        mismatched: [string, {nested: true

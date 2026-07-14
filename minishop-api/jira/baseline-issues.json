@@ -1,0 +1,576 @@
+{
+  "expand": "schema,names",
+  "startAt": 0,
+  "maxResults": 50,
+  "total": 8,
+  "issues": [
+    {
+      "id": "100102",
+      "key": "API-102",
+      "self": "https://minishop-audit-fixture.atlassian.net/rest/api/3/issue/100102",
+      "fields": {
+        "summary": "Retire legacy product route and remove duplicate cart-item registration",
+        "description": "Audit evidence shows GET /api/v1/product/{id} remains callable although it is deprecated, and POST /api/v1/cart/items is registered by both CartController.add and LegacyController. Remove the legacy controller registrations after consumer traffic is confirmed at zero. Preserve a 410 migration response during the agreed sunset period.",
+        "issuetype": {
+          "id": "10001",
+          "name": "Bug"
+        },
+        "project": {
+          "id": "10000",
+          "key": "API",
+          "name": "MiniShop API Documentation"
+        },
+        "priority": {
+          "id": "2",
+          "name": "High"
+        },
+        "status": {
+          "id": "10000",
+          "name": "To Do",
+          "statusCategory": {
+            "key": "new",
+            "name": "To Do"
+          }
+        },
+        "resolution": null,
+        "assignee": {
+          "accountId": "5e14e2a4c90d8f0abc100204",
+          "displayName": "Rohan Kulkarni",
+          "emailAddress": "rohan.kulkarni@minishop.invalid"
+        },
+        "reporter": {
+          "accountId": "5e14e2a4c90d8f0abc100101",
+          "displayName": "Nandita Bose",
+          "emailAddress": "nandita.bose@minishop.invalid"
+        },
+        "created": "2025-10-14T11:36:20.000+0000",
+        "updated": "2026-02-17T10:26:53.000+0000",
+        "duedate": "2026-07-17",
+        "labels": [
+          "api-audit",
+          "legacy-route",
+          "duplicate-route",
+          "fixture-unresolved"
+        ],
+        "components": [
+          {
+            "id": "10021",
+            "name": "Cart"
+          },
+          {
+            "id": "10026",
+            "name": "Catalog"
+          }
+        ],
+        "customfield_10042": "POST /api/v1/cart/items; GET /api/v1/product/{id}",
+        "customfield_10043": "src/controllers/cart.controller.ts; src/controllers/legacy.controller.ts",
+        "customfield_10044": "High",
+        "customfield_10045": "Internal and Public",
+        "comment": {
+          "comments": [
+            {
+              "id": "11001",
+              "author": {
+                "displayName": "Nandita Bose"
+              },
+              "body": "2026-02 re-audit: the duplicate POST remains visible in source. Keep this ticket open and append new evidence instead of creating another issue.",
+              "created": "2026-02-17T10:26:53.000+0000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "100145",
+      "key": "API-145",
+      "self": "https://minishop-audit-fixture.atlassian.net/rest/api/3/issue/100145",
+      "fields": {
+        "summary": "Correct security and login schemas in the published OpenAPI contract",
+        "description": "Two authentication-contract defects share the same documentation-generation root cause. POST /api/v1/auth/login documents username and an eight-character password while LoginDto accepts email and requires twelve characters. POST /api/v1/payments/{paymentId}/capture incorrectly has security: [] although source requires JWT, manager or admin role, and payments:capture.",
+        "issuetype": {
+          "id": "10001",
+          "name": "Bug"
+        },
+        "project": {
+          "id": "10000",
+          "key": "API",
+          "name": "MiniShop API Documentation"
+        },
+        "priority": {
+          "id": "1",
+          "name": "Highest"
+        },
+        "status": {
+          "id": "3",
+          "name": "In Progress",
+          "statusCategory": {
+            "key": "indeterminate",
+            "name": "In Progress"
+          }
+        },
+        "resolution": null,
+        "assignee": {
+          "accountId": "5e14e2a4c90d8f0abc100207",
+          "displayName": "Aditi Shah",
+          "emailAddress": "aditi.shah@minishop.invalid"
+        },
+        "reporter": {
+          "accountId": "5e14e2a4c90d8f0abc100101",
+          "displayName": "Nandita Bose",
+          "emailAddress": "nandita.bose@minishop.invalid"
+        },
+        "created": "2025-11-03T08:10:48.000+0000",
+        "updated": "2026-06-12T09:41:15.000+0000",
+        "duedate": "2026-07-08",
+        "labels": [
+          "api-audit",
+          "openapi",
+          "authentication",
+          "payment-security",
+          "fixture-unresolved"
+        ],
+        "components": [
+          {
+            "id": "10020",
+            "name": "Authentication"
+          },
+          {
+            "id": "10024",
+            "name": "Payments"
+          }
+        ],
+        "customfield_10042": "POST /api/v1/auth/login; POST /api/v1/payments/{paymentId}/capture",
+        "customfield_10043": "src/dto/auth-user.dto.ts; src/controllers/payments.controller.ts; docs/openapi.yaml",
+        "customfield_10044": "Critical",
+        "customfield_10045": "Public and Internal",
+        "comment": {
+          "comments": [
+            {
+              "id": "11002",
+              "author": {
+                "displayName": "Aditi Shah"
+              },
+              "body": "Generator authentication metadata patch is in progress. Reuse this ticket for any capture-security drift found by the next audit.",
+              "created": "2026-06-12T09:41:15.000+0000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "100221",
+      "key": "API-221",
+      "self": "https://minishop-audit-fixture.atlassian.net/rest/api/3/issue/100221",
+      "fields": {
+        "summary": "Synchronize product response fields and user-profile update schema",
+        "description": "Completed documentation synchronization for ProductResponseDto inventory and rating properties and UpdateUserDto profile fields during the January documentation refresh. The fixture deliberately reintroduces related drift so the automation can demonstrate that resolved tickets are not reopened automatically.",
+        "issuetype": {
+          "id": "10002",
+          "name": "Task"
+        },
+        "project": {
+          "id": "10000",
+          "key": "API",
+          "name": "MiniShop API Documentation"
+        },
+        "priority": {
+          "id": "3",
+          "name": "Medium"
+        },
+        "status": {
+          "id": "10001",
+          "name": "Done",
+          "statusCategory": {
+            "key": "done",
+            "name": "Done"
+          }
+        },
+        "resolution": {
+          "id": "1",
+          "name": "Fixed"
+        },
+        "assignee": {
+          "accountId": "5e14e2a4c90d8f0abc100209",
+          "displayName": "Farah Siddiqui",
+          "emailAddress": "farah.siddiqui@minishop.invalid"
+        },
+        "reporter": {
+          "accountId": "5e14e2a4c90d8f0abc100103",
+          "displayName": "Vivek Nair",
+          "emailAddress": "vivek.nair@minishop.invalid"
+        },
+        "created": "2025-12-12T10:02:57.000+0000",
+        "updated": "2026-03-28T05:52:19.000+0000",
+        "resolutiondate": "2026-03-28T05:52:19.000+0000",
+        "labels": [
+          "api-audit",
+          "schema",
+          "catalog",
+          "fixture-resolved"
+        ],
+        "components": [
+          {
+            "id": "10022",
+            "name": "Users"
+          },
+          {
+            "id": "10026",
+            "name": "Catalog"
+          }
+        ],
+        "customfield_10042": "PATCH /api/v1/users/me; GET /api/v2/products/{productId}",
+        "customfield_10043": "src/dto/auth-user.dto.ts; src/dto/catalog.dto.ts; docs/openapi.yaml",
+        "customfield_10044": "Medium",
+        "customfield_10045": "Internal and Public",
+        "comment": {
+          "comments": [
+            {
+              "id": "11003",
+              "author": {
+                "displayName": "Farah Siddiqui"
+              },
+              "body": "Contract regenerated from DTO metadata and verified against 2.3.8. Closing as fixed.",
+              "created": "2026-03-28T05:52:19.000+0000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "100317",
+      "key": "API-317",
+      "self": "https://minishop-audit-fixture.atlassian.net/rest/api/3/issue/100317",
+      "fields": {
+        "summary": "Replace obsolete order and checkout address/payment request documentation",
+        "description": "OpenAPI and the historical Postman collection still represent order and checkout requests using addressId or a flat address plus paymentMethod. Source uses nested shippingAddress, PaymentProvider, and optional promotionCode. Update the schemas and collection examples together.",
+        "issuetype": {
+          "id": "10001",
+          "name": "Bug"
+        },
+        "project": {
+          "id": "10000",
+          "key": "API",
+          "name": "MiniShop API Documentation"
+        },
+        "priority": {
+          "id": "1",
+          "name": "Highest"
+        },
+        "status": {
+          "id": "3",
+          "name": "In Progress",
+          "statusCategory": {
+            "key": "indeterminate",
+            "name": "In Progress"
+          }
+        },
+        "resolution": null,
+        "assignee": {
+          "accountId": "5e14e2a4c90d8f0abc100213",
+          "displayName": "Ishaan Deshpande",
+          "emailAddress": "ishaan.deshpande@minishop.invalid"
+        },
+        "reporter": {
+          "accountId": "5e14e2a4c90d8f0abc100103",
+          "displayName": "Vivek Nair",
+          "emailAddress": "vivek.nair@minishop.invalid"
+        },
+        "created": "2025-12-22T07:43:19.000+0000",
+        "updated": "2026-06-26T11:18:42.000+0000",
+        "duedate": "2026-07-12",
+        "labels": [
+          "api-audit",
+          "openapi",
+          "orders",
+          "checkout",
+          "fixture-unresolved"
+        ],
+        "components": [
+          {
+            "id": "10023",
+            "name": "Orders"
+          },
+          {
+            "id": "10025",
+            "name": "Checkout"
+          }
+        ],
+        "customfield_10042": "POST /api/v1/orders; POST /api/v1/cart/checkout",
+        "customfield_10043": "src/dto/commerce.dto.ts; docs/openapi.yaml; postman/postman_collection_old.json",
+        "customfield_10044": "Critical",
+        "customfield_10045": "Internal",
+        "comment": {
+          "comments": [
+            {
+              "id": "11004",
+              "author": {
+                "displayName": "Ishaan Deshpande"
+              },
+              "body": "Order schema changes are drafted. Checkout still needs promotionCode and payment-provider examples; attach new audit evidence here.",
+              "created": "2026-06-26T11:18:42.000+0000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "100181",
+      "key": "API-181",
+      "self": "https://minishop-audit-fixture.atlassian.net/rest/api/3/issue/100181",
+      "fields": {
+        "summary": "Publish pagination, filtering, and sorting conventions for list routes",
+        "description": "Standardize page, limit, domain filters, and sort options for product, order, inventory, and review list endpoints. Response meta objects must be described consistently.",
+        "issuetype": {
+          "id": "10004",
+          "name": "Story"
+        },
+        "project": {
+          "id": "10000",
+          "key": "API",
+          "name": "MiniShop API Documentation"
+        },
+        "priority": {
+          "id": "3",
+          "name": "Medium"
+        },
+        "status": {
+          "id": "10002",
+          "name": "Selected for Development",
+          "statusCategory": {
+            "key": "new",
+            "name": "To Do"
+          }
+        },
+        "resolution": null,
+        "assignee": {
+          "accountId": "5e14e2a4c90d8f0abc100209",
+          "displayName": "Farah Siddiqui",
+          "emailAddress": "farah.siddiqui@minishop.invalid"
+        },
+        "reporter": {
+          "accountId": "5e14e2a4c90d8f0abc100101",
+          "displayName": "Nandita Bose",
+          "emailAddress": "nandita.bose@minishop.invalid"
+        },
+        "created": "2025-09-03T06:15:07.000+0000",
+        "updated": "2026-05-18T10:29:55.000+0000",
+        "duedate": "2026-07-25",
+        "labels": [
+          "api-audit",
+          "pagination",
+          "filtering",
+          "sorting",
+          "fixture-unresolved"
+        ],
+        "components": [
+          {
+            "id": "10027",
+            "name": "Shared API Standards"
+          }
+        ],
+        "customfield_10042": "GET /api/v2/products; GET /api/v1/orders; GET /api/v1/inventory; GET /api/v1/products/{productId}/reviews",
+        "customfield_10043": "src/controllers; docs/openapi.yaml",
+        "customfield_10044": "Medium",
+        "customfield_10045": "Public and Internal",
+        "comment": {
+          "comments": []
+        }
+      }
+    },
+    {
+      "id": "100256",
+      "key": "API-256",
+      "self": "https://minishop-audit-fixture.atlassian.net/rest/api/3/issue/100256",
+      "fields": {
+        "summary": "Remove obsolete product search and payment authorization requests from collections",
+        "description": "Removed GET /api/v1/products/search and POST /api/v1/payments/authorize from generated collections after consumers migrated to product query parameters and cart checkout.",
+        "issuetype": {
+          "id": "10002",
+          "name": "Task"
+        },
+        "project": {
+          "id": "10000",
+          "key": "API",
+          "name": "MiniShop API Documentation"
+        },
+        "priority": {
+          "id": "4",
+          "name": "Low"
+        },
+        "status": {
+          "id": "10001",
+          "name": "Done",
+          "statusCategory": {
+            "key": "done",
+            "name": "Done"
+          }
+        },
+        "resolution": {
+          "id": "1",
+          "name": "Fixed"
+        },
+        "assignee": {
+          "accountId": "5e14e2a4c90d8f0abc100204",
+          "displayName": "Rohan Kulkarni",
+          "emailAddress": "rohan.kulkarni@minishop.invalid"
+        },
+        "reporter": {
+          "accountId": "5e14e2a4c90d8f0abc100103",
+          "displayName": "Vivek Nair",
+          "emailAddress": "vivek.nair@minishop.invalid"
+        },
+        "created": "2025-04-08T15:35:29.000+0000",
+        "updated": "2025-05-02T11:43:17.000+0000",
+        "resolutiondate": "2025-05-02T11:43:17.000+0000",
+        "labels": [
+          "postman",
+          "deprecated",
+          "fixture-resolved"
+        ],
+        "components": [
+          {
+            "id": "10027",
+            "name": "Shared API Standards"
+          }
+        ],
+        "customfield_10042": "GET /api/v1/products/search; POST /api/v1/payments/authorize",
+        "customfield_10043": "postman/postman_collection_old.json",
+        "customfield_10044": "Low",
+        "customfield_10045": "Public and Internal",
+        "comment": {
+          "comments": []
+        }
+      }
+    },
+    {
+      "id": "100289",
+      "key": "API-289",
+      "self": "https://minishop-audit-fixture.atlassian.net/rest/api/3/issue/100289",
+      "fields": {
+        "summary": "Document administrator and manager permission requirements",
+        "description": "Add x-required-roles and x-required-permissions metadata to role and status-change operations, including users:roles:write and orders:status:write.",
+        "issuetype": {
+          "id": "10002",
+          "name": "Task"
+        },
+        "project": {
+          "id": "10000",
+          "key": "API",
+          "name": "MiniShop API Documentation"
+        },
+        "priority": {
+          "id": "2",
+          "name": "High"
+        },
+        "status": {
+          "id": "10003",
+          "name": "Blocked",
+          "statusCategory": {
+            "key": "indeterminate",
+            "name": "In Progress"
+          }
+        },
+        "resolution": null,
+        "assignee": {
+          "accountId": "5e14e2a4c90d8f0abc100207",
+          "displayName": "Aditi Shah",
+          "emailAddress": "aditi.shah@minishop.invalid"
+        },
+        "reporter": {
+          "accountId": "5e14e2a4c90d8f0abc100101",
+          "displayName": "Nandita Bose",
+          "emailAddress": "nandita.bose@minishop.invalid"
+        },
+        "created": "2025-08-06T12:43:51.000+0000",
+        "updated": "2026-05-09T14:31:26.000+0000",
+        "labels": [
+          "api-audit",
+          "rbac",
+          "permissions",
+          "fixture-unresolved"
+        ],
+        "components": [
+          {
+            "id": "10020",
+            "name": "Authentication"
+          }
+        ],
+        "customfield_10042": "PATCH /api/v1/users/{userId}/role; PATCH /api/v1/orders/{orderId}/status",
+        "customfield_10043": "src/controllers/users.controller.ts; src/controllers/orders.controller.ts; docs/openapi.yaml",
+        "customfield_10044": "High",
+        "customfield_10045": "Internal",
+        "comment": {
+          "comments": [
+            {
+              "id": "11007",
+              "author": {
+                "displayName": "Aditi Shah"
+              },
+              "body": "Blocked until the documentation extension format for fine-grained permissions is agreed.",
+              "created": "2026-05-09T14:31:26.000+0000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "100304",
+      "key": "API-304",
+      "self": "https://minishop-audit-fixture.atlassian.net/rest/api/3/issue/100304",
+      "fields": {
+        "summary": "Align inventory adjustment limits with validation decorators",
+        "description": "Document the -10000 to 10000 adjustment bound, required reasonDetail, and the 250-character reason maximum. Add 400 examples for each constraint.",
+        "issuetype": {
+          "id": "10002",
+          "name": "Task"
+        },
+        "project": {
+          "id": "10000",
+          "key": "API",
+          "name": "MiniShop API Documentation"
+        },
+        "priority": {
+          "id": "3",
+          "name": "Medium"
+        },
+        "status": {
+          "id": "10000",
+          "name": "To Do",
+          "statusCategory": {
+            "key": "new",
+            "name": "To Do"
+          }
+        },
+        "resolution": null,
+        "assignee": null,
+        "reporter": {
+          "accountId": "5e14e2a4c90d8f0abc100103",
+          "displayName": "Vivek Nair",
+          "emailAddress": "vivek.nair@minishop.invalid"
+        },
+        "created": "2026-03-02T07:31:08.000+0000",
+        "updated": "2026-03-02T07:31:08.000+0000",
+        "duedate": "2026-07-31",
+        "labels": [
+          "api-audit",
+          "inventory",
+          "validation",
+          "fixture-unresolved"
+        ],
+        "components": [
+          {
+            "id": "10028",
+            "name": "Inventory"
+          }
+        ],
+        "customfield_10042": "POST /api/v1/inventory/{productId}/adjustments",
+        "customfield_10043": "src/dto/catalog.dto.ts; docs/openapi.yaml",
+        "customfield_10044": "Medium",
+        "customfield_10045": "Internal",
+        "comment": {
+          "comments": []
+        }
+      }
+    }
+  ]
+}
