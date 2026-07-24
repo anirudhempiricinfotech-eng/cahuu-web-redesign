@@ -40,6 +40,13 @@ These values are intentionally fictional and may only be used in local tests.
 
 All responses that include data are JSON. Generated access tokens last 15 minutes; refresh tokens last seven days. State is stored in memory.
 
+The v1 login route is dispatched by `src/server.js` to
+`AuthController.login` in `src/controllers/auth.controller.js`. Its request is
+represented by `LoginRequestDto` in `src/dto/login-request.dto.js`, whose
+declarative validation metadata marks `email` and `password` required. The
+in-memory account is a `UserEntity` in `src/entities/user.entity.js`; its
+public projection excludes `passwordHash`.
+
 ## Curl examples
 
 Health:
