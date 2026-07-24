@@ -40,6 +40,13 @@ These values are intentionally fictional and may only be used in local tests.
 
 All responses that include data are JSON. Generated access tokens last 15 minutes; refresh tokens last seven days. State is stored in memory.
 
+The v1 login route is dispatched by `src/server.js` to
+`AuthController.login` in `src/controllers/auth.controller.js`. Its request is
+represented by `LoginRequestDto` in `src/dto/login-request.dto.js`, whose
+declarative validation metadata marks `email` and `password` required. The
+in-memory account is a `UserEntity` in `src/entities/user.entity.js`; its
+public projection excludes `passwordHash`.
+
 ## Curl examples
 
 Health:
@@ -95,9 +102,9 @@ curl.exe -i -X DELETE http://127.0.0.1:3000/api/v1/auth/session -H "Authorizatio
 
 Signup fields:
 
-- `name`: required string, trimmed length 2–80.
+- `name`: required string, trimmed length 2â€“80.
 - `email`: required valid email, maximum 254 characters.
-- `password`: required string, 8–72 characters, with at least one uppercase letter, lowercase letter and digit.
+- `password`: required string, 8â€“72 characters, with at least one uppercase letter, lowercase letter and digit.
 - `acceptTerms`: required and must be literal Boolean `true`.
 
 Example error:
@@ -114,3 +121,4 @@ Example error:
 ```
 
 Possible statuses are 200, 201, 202, 204, 400, 401, 404, 409, 413, 429 and 500. Login rate-limit responses include a `Retry-After` header.
+

@@ -2,6 +2,8 @@
 
 const http = require("node:http");
 const crypto = require("node:crypto");
+const { AuthController } = require("./controllers/auth.controller");
+const { UserEntity } = require("./entities/user.entity");
 
 const ACCESS_TOKEN_TTL_MS = 15 * 60 * 1000;
 const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
@@ -22,14 +24,14 @@ function createState() {
     loginAttempts: new Map(),
   };
 
-  const seededUser = {
+  const seededUser = new UserEntity({
     id: "7b301d54-a817-4604-9c9c-43248f81226f",
     name: "Aarav Mehta",
     email: "aarav.mehta@example.test",
     passwordHash: hashPassword("CahuuDemo9"),
     roles: ["user"],
     createdAt: "2026-07-02T09:00:00.000Z",
-  };
+  });
   state.usersByEmail.set(seededUser.email, seededUser);
   state.usersById.set(seededUser.id, seededUser);
   state.resetTokens.set("dummy-reset-token-aarav-2026", {
@@ -44,6 +46,7 @@ function hashPassword(password) {
 }
 
 function publicUser(user) {
+  if (user instanceof UserEntity) return user.toPublicJSON();
   return {
     id: user.id,
     name: user.name,
@@ -147,17 +150,6 @@ function validateSignup(body) {
   if (details.length) throw httpError(400, "VALIDATION_ERROR", "One or more fields are invalid.", details);
 }
 
-function validateLogin(body) {
-  const details = [];
-  if (typeof body.email !== "string" || !emailPattern.test(body.email)) {
-    details.push({ field: "email", rule: "required valid email" });
-  }
-  if (typeof body.password !== "string" || body.password.length === 0) {
-    details.push({ field: "password", rule: "required non-empty string" });
-  }
-  if (details.length) throw httpError(400, "VALIDATION_ERROR", "One or more fields are invalid.", details);
-}
-
 function authenticate(state, req) {
   const header = req.headers.authorization;
   if (!header || !header.startsWith("Bearer ")) {
@@ -199,6 +191,10 @@ function allowCors(req, res) {
 
 function createApp(initialState) {
   const state = initialState || createState();
+  const authController = new AuthController({
+    state, emailPattern, httpError, readJson, checkLoginRateLimit,
+    hashPassword, publicUser, issueTokens, writeJson,
+  });
 
   const server = http.createServer(async (req, res) => {
     allowCors(req, res);
@@ -227,14 +223,14 @@ function createApp(initialState) {
         if (state.usersByEmail.has(email)) {
           throw httpError(409, "EMAIL_IN_USE", "An account already exists for this email.");
         }
-        const user = {
+        const user = new UserEntity({
           id: crypto.randomUUID(),
           name: body.name.trim(),
           email,
           passwordHash: hashPassword(body.password),
           roles: ["user"],
           createdAt: new Date().toISOString(),
-        };
+        });
         state.usersByEmail.set(email, user);
         state.usersById.set(user.id, user);
         writeJson(res, 201, {
@@ -245,18 +241,7 @@ function createApp(initialState) {
       }
 
       if (req.method === "POST" && url.pathname === "/api/v1/auth/login") {
-        checkLoginRateLimit(state, req);
-        const body = await readJson(req);
-        validateLogin(body);
-        const email = body.email.trim().toLowerCase();
-        const user = state.usersByEmail.get(email);
-        if (!user || user.passwordHash !== hashPassword(body.password)) {
-          throw httpError(401, "INVALID_CREDENTIALS", "Email or password is incorrect.");
-        }
-        writeJson(res, 200, {
-          user: publicUser(user),
-          session: issueTokens(state, user.id),
-        });
+        await authController.login(req, res);
         return;
       }
 
@@ -382,3 +367,4 @@ module.exports = {
   createState,
   hashPassword,
 };
+
