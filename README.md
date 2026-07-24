@@ -17,4 +17,3 @@ The documentation comparison inputs are:
 
 Run the fixture tests with `cd dummy-auth-api && npm test`. All accounts,
 credentials, tokens, and examples in this fixture are fictional local-test data.
-

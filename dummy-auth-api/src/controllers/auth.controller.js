@@ -16,7 +16,7 @@ class AuthController {
     this.writeJson = dependencies.writeJson;
   }
 
-  /** POST /api/v1/auth/login â€” public, five attempts/source/60 seconds. */
+  /** POST /api/v1/auth/login — public, five attempts/source/60 seconds. */
   async login(req, res) {
     this.checkLoginRateLimit(this.state, req);
     const body = await this.readJson(req);
@@ -37,4 +37,3 @@ class AuthController {
 }
 
 module.exports = { AuthController };
-

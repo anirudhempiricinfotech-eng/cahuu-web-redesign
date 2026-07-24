@@ -31,4 +31,3 @@ class LoginRequestDto {
 }
 
 module.exports = { LoginRequestDto };
-

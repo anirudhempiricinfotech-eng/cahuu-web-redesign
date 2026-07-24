@@ -367,4 +367,3 @@ module.exports = {
   createState,
   hashPassword,
 };
-
